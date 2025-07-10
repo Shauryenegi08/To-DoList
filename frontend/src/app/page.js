@@ -9,9 +9,13 @@ export default function Home() {
   const [title, setTitle] = useState("");
 
   const fetchTodos = async () => {
+  try {
     const res = await getTodos();
-    setTodos(res.data.data);
-  };
+    setTodos(res?.data?.data || []);
+  } catch (error) {
+    setTodos([]);
+  }
+};
 
   useEffect(() => {
     fetchTodos();
@@ -36,7 +40,8 @@ export default function Home() {
   };
 
   const remaining = todos.filter((t) => !t.attributes.completed).length;
-
+  
+  console.log('todo', todos);
   return (
     // <div className="min-h-screen bg-gray-100 p-4 md:p-10">
     //   <div className="max-w-xl mx-auto">
