@@ -10,3 +10,23 @@ export default [
   'strapi::favicon',
   'strapi::public',
 ];
+
+module.exports = [
+  'strapi::errors',
+  {
+    name: 'strapi::cors',
+    config: {
+      origin: ['http://localhost:3000'], // your frontend origin
+      methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    },
+  },
+  'strapi::security',
+  'strapi::poweredBy',
+  'strapi::logger',
+  'strapi::query',
+  'strapi::body',
+  'strapi::session',
+  'strapi::favicon',
+  'strapi::public',
+];
+
