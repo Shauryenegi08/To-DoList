@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getTodos, addTodo, updateTodo, deleteTodo } from "../services/api";
-// import TodoItem from '../components/toDoItem';
+import ToDoItem from '../components/toDoItem';
 
 export default function Home() {
   const [todos, setTodos] = useState([]);
@@ -11,7 +11,7 @@ export default function Home() {
   const fetchTodos = async () => {
   try {
     const res = await getTodos();
-    setTodos(res?.data?.data || []);
+    setTodos(res?.data || []);
   } catch (error) {
     setTodos([]);
   }
@@ -30,7 +30,7 @@ export default function Home() {
   };
 
   const handleToggle = async (todo) => {
-    await updateTodo(todo.id, !todo.attributes.completed);
+    await updateTodo(todo.id, !todo.completed);
     fetchTodos();
   };
 
@@ -39,72 +39,43 @@ export default function Home() {
     fetchTodos();
   };
 
-  const remaining = todos.filter((t) => !t.attributes.completed).length;
+  const remaining = todos.filter((t) => !t.completed).length;
   
-  console.log('todo', todos);
   return (
-    // <div className="min-h-screen bg-gray-100 p-4 md:p-10">
-    //   <div className="max-w-xl mx-auto">
-    //     <h1 className="text-3xl font-bold mb-6">To-Do List</h1>
-    //     <form onSubmit={handleAdd} className="flex mb-4">
-    //       <input
-    //         type="text"
-    //         className="flex-1 p-2 rounded-l border border-gray-300"
-    //         placeholder="Add new task..."
-    //         value={title}
-    //         onChange={(e) => setTitle(e.target.value)}
-    //       />
-    //       <button className="bg-blue-500 text-white px-4 py-2 rounded-r hover:bg-blue-600">Add</button>
-    //     </form>
+    <div suppressHydrationWarning={true}>
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+        <div className="w-full max-w-xl bg-white p-6 rounded-lg shadow-md">
+          <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">
+            To-Do List
+          </h1>
 
-    //     <div>
-    //       {todos.map((todo) => (
-    //         <TodoItem
-    //           key={todo.id}
-    //           todo={todo}
-    //           onToggle={handleToggle}
-    //           onDelete={handleDelete}
-    //         />
-    //       ))}
-    //     </div>
-
-    //     <div className="text-sm text-gray-600 mt-4">
-    //       {remaining} task{remaining !== 1 ? 's' : ''} remaining
-    //     </div>
-    //   </div>
-    // </div>
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
-      <div className="w-full max-w-xl bg-white p-6 rounded-lg shadow-md">
-        <h1 className="text-4xl font-bold text-center mb-6 text-gray-800">
-          To-Do List
-        </h1>
-
-        <form onSubmit={handleAdd} className="flex mb-6">
-          <input
-            type="text"
-            className="flex-1 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            placeholder="Add new task..."
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-          <button className="bg-blue-500 text-white px-6 rounded-r-lg hover:bg-blue-600 transition">
-            Add
-          </button>
-        </form>
-
-        <div>
-          {todos.map((todo) => (
-            <TodoItem
-              key={todo.id}
-              todo={todo}
-              onToggle={handleToggle}
-              onDelete={handleDelete}
+          <form onSubmit={handleAdd} className="flex mb-6">
+            <input
+              type="text"
+              className="flex-1 p-3 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+              placeholder="Add new task..."
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
-          ))}
-        </div>
+            <button className="bg-blue-500 text-white px-6 rounded-r-lg hover:bg-blue-600 transition">
+              Add
+            </button>
+          </form>
 
-        <div className="text-sm text-gray-600 mt-6 text-center">
-          {remaining} task{remaining !== 1 ? "s" : ""} remaining
+          <div>
+            {todos.map((todo) => (
+              <ToDoItem
+                key={todo.id}
+                todo={todo}
+                onToggle={handleToggle}
+                onDelete={handleDelete}
+              />
+            ))}
+          </div>
+
+          <div className="text-sm text-gray-600 mt-6 text-center">
+            {remaining} task{remaining !== 1 ? "s" : ""} remaining
+          </div>
         </div>
       </div>
     </div>
